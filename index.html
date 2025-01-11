@@ -48,16 +48,15 @@
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script>
-    let tg = window.Telegram.WebApp;
 
     const startScanner = () => {
-        tg.showScanQrPopup({ text: 'Scan a QR code' }, (result) => {
+        Telegram.WebApp.showScanQrPopup({ text: 'Scan a QR code' }, (result) => {
             if (result) {
                 // Display scanned result
                 document.getElementById('status').textContent = `QR Code: ${result}`;
 
                 // Send result back to the bot
-                tg.sendData(result)
+                Telegram.WebApp.sendData(result)
             } else {
                 document.getElementById('status').textContent = 'No QR code scanned.';
             }
