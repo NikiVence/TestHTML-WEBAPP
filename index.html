@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram QR Scanner</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #1e1e1e;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        #scanner-container {
+            text-align: center;
+        }
+        button {
+            background-color: #4caf50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            font-size: 16px;
+            margin-top: 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #status {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+<div id="scanner-container">
+    <h1>QR Scanner</h1>
+    <button onclick="startScanner()">Start QR Scanner</button>
+    <p id="status"></p>
+</div>
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script>
+    let tg = window.Telegram.WebbApp;
+
+    const startScanner = () => {
+        tg.showScanQrPopup({ text: 'Scan a QR code' }, (result) => {
+            if (result) {
+                // Display scanned result
+                document.getElementById('status').textContent = `QR Code: ${result}`;
+
+                // Send result back to the bot
+                tg.sendData(result)
+            } else {
+                document.getElementById('status').textContent = 'No QR code scanned.';
+            }
+        });
+    };
+    window.onload = startScanner;
+</script>
+</body>
+</html>
