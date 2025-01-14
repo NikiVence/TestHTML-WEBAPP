@@ -58,6 +58,8 @@
                 // Send result back to the bot
                 const data = {res: result}
                 Telegram.WebApp.sendData(JSON.stringify(data))
+                Telegram.WebApp.closeScanQrPopup();
+                
             } else {
                 document.getElementById('status').textContent = 'No QR code scanned.';
             }
