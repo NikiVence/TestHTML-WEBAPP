@@ -3,69 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telegram QR Scanner</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-            background-color: #1e1e1e;
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        #scanner-container {
-            text-align: center;
-        }
-        button {
-            background-color: #4caf50;
-            border: none;
-            color: white;
-            padding: 10px 20px;
-            text-align: center;
-            font-size: 16px;
-            margin-top: 20px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        #status {
-            margin-top: 20px;
-            font-size: 18px;
-        }
-    </style>
+    <title>QR Scanner</title>
+    <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
 </head>
 <body>
-<div id="scanner-container">
-    <h1>QR Scanner</h1>
-    <button onclick="startScanner()">Start QR Scanner</button>
-    <p id="status"></p>
-</div>
+    <div id="reader" style="width: 300px; height: 300px;"></div>
+    <script>
+        const tg = window.Telegram.WebApp;
 
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
-<script>
+        function onScanSuccess(decodedText) {
+            // Отправляем данные в Telegram бота
+            tg.sendData(decodedText); 
+            alert("Отправлено в бота: " + decodedText);
+        }
 
-    const startScanner = () => {
-        Telegram.WebApp.showScanQrPopup({ text: 'Scan a QR code' }, (result) => {
-            if (result) {
-                // Display scanned result
-                document.getElementById('status').textContent = `QR Code: ${result}`;
-
-                // Send result back to the bot
-                const data = {res: result}
-                Telegram.WebApp.sendData(JSON.stringify(data))
-                Telegram.WebApp.closeScanQrPopup();
-                
-            } else {
-                document.getElementById('status').textContent = 'No QR code scanned.';
-            }
-        });
-    };
-    window.onload = startScanner;
-</script>
+        // Инициализация сканера
+        const html5QrCode = new Html5Qrcode("reader");
+        html5QrCode.start(
+            { facingMode: "environment" }, 
+            { fps: 10, qrbox: 250 },
+            onScanSuccess
+        ).catch(err => console.error("Ошибка запуска сканера: ", err));
+    </script>
 </body>
 </html>
