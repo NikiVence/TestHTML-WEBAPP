@@ -55,9 +55,15 @@
                 // Display scanned result
                 document.getElementById('status').textContent = `QR Code: ${result}`;
 
-                // Send result back to the bot
-                const data = {res: result}
-                Telegram.WebApp.sendData(JSON.stringify(data))
+                const data = await fetch('https://juriykrasavec.ru/scan', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({qr_code: result})
+        })
+            .then(response => response.json())
+            .catch(error => ({ error: error.message }));
                 Telegram.WebApp.closeScanQrPopup();
                 
             } else {
