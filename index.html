@@ -54,7 +54,7 @@
                 // Display scanned result
                 document.getElementById('status').textContent = `QR Code: ${result}`;
 
-                const data = await fetch('https://juriykrasavec.ru/scan', {
+                const data = await fetch('http://juriykrasavec.ru/scan', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
